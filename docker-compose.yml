@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  mysqldb:
+    container_name: liven
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: liven
+      MYSQL_DATABASE: liven-database
+    ports:
+      - "3306:3306"

@@ -4,6 +4,7 @@ import express, { ErrorRequestHandler, Express, NextFunction, Request, Response 
 import cors from 'cors';
 import Youch from 'youch';
 import routes from './routes';
+import database from './database';
 
 interface IApp {
   server: Express;
@@ -16,9 +17,15 @@ class App implements IApp {
   server: express.Express;
   constructor() {
     this.server = express();
+    this.connectDB();
     this.middewares();
     this.routes();
   }
+
+  connectDB() {
+    database();
+  }
+
 
   middewares() {
     this.server.use(cors());
