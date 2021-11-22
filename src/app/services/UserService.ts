@@ -54,17 +54,16 @@ class UserService {
     const findedAndUpdatedUser = await userRepository.findById(updateUser['id']);
 
     if (!findedAndUpdatedUser) {
-      throw new AppError(`Endereço com id '${updateUser['id']}' não encontrado`);
+      throw new AppError(`usuário com id '${updateUser['id']}' não encontrado`);
     }
 
-    const keys = Object.keys(updateUser);
-    keys.forEach(key => {
+    Object.keys(updateUser).forEach(key => {
       findedAndUpdatedUser[key] = updateUser[key];
     })
 
-
     try {
-      await userRepository.save(findedAndUpdatedUser);
+      await userRepository.update(findedAndUpdatedUser.id, findedAndUpdatedUser);
+      delete findedAndUpdatedUser.password;
       return findedAndUpdatedUser;
     } catch (error) {
       throw new AppError(error.message, 500);
@@ -77,7 +76,7 @@ class UserService {
     const findUserById = await userRepository.findById(id);
 
     if (!findUserById) {
-      throw new AppError(`Usuario com id '${id}' não encontrado`, 404);
+      throw new AppError(`Usuário com id '${id}' não encontrado`, 404);
     }
     try {
       await userRepository.delete(findUserById);
@@ -93,7 +92,7 @@ class UserService {
     const findUserById = await userRepository.findById(id);
 
     if (!findUserById) {
-      throw new AppError(`Usuario com id '${id}' não encontrado`, 404);
+      throw new AppError(`Usuário com id '${id}' não encontrado`, 404);
     }
     return findUserById;
   }

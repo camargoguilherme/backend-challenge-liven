@@ -18,7 +18,8 @@ class UserController {
   }
 
   public async update(req: Request, res: Response) {
-    const updateUser = req.body;
+    const userId = req['userId'];
+    const updateUser = { ...req.body, id: userId };
     const userService = new UserService();
     try {
       const user = await userService.update(updateUser);
@@ -30,10 +31,10 @@ class UserController {
   }
 
   public async delete(req: Request, res: Response) {
-    const { id } = req.params;
+    const userId = req['userId'];
     const userService = new UserService();
     try {
-      const user = await userService.delete(id);
+      const user = await userService.delete(userId);
       return res.json(user);
     } catch (error) {
       const err = error as AppError
@@ -42,10 +43,10 @@ class UserController {
   }
 
   public async find(req: Request, res: Response) {
-    const { id } = req.params;
+    const userId = req['userId'];
     const userService = new UserService();
     try {
-      const user = await userService.find(id);
+      const user = await userService.find(userId);
       return res.json(user);
     } catch (error) {
       const err = error as AppError

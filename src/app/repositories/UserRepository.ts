@@ -5,14 +5,16 @@ import User from '../models/user.model';
 class UserRepository extends Repository<User>{
   public async findByUsername(username: string): Promise<User | null> {
     const findUser = await this.findOne({
-      where: { username }
+      where: { username },
+      relations: ['address']
     })
     return findUser || null;
   }
 
   public async findById(id: string): Promise<User | null> {
     const findUser = await this.findOne({
-      where: { id }
+      where: { id },
+      relations: ['address']
     })
     return findUser || null;
   }

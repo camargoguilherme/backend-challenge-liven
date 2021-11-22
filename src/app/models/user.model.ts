@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BeforeInsert } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
 import bcrypt from 'bcryptjs';
 
 import Address from './address.model';
@@ -9,7 +9,7 @@ class User {
   id: number;
 
   @OneToMany(type => Address, address => address.user)
-  addres: Address[];
+  address: Address[];
 
   @Column()
   username: string;
@@ -23,6 +23,13 @@ class User {
   @BeforeInsert()
   beforeInsert() {
     this.password = this.hashPassword(this.password);
+  }
+
+  @BeforeUpdate()
+  beforeUpdate() {
+    if (this.password) {
+      this.password = this.hashPassword(this.password);
+    }
   }
 
   hashPassword(password: string) {

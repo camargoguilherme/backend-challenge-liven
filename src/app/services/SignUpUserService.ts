@@ -26,13 +26,18 @@ interface Request {
 
 class SignUpUserService {
   public async create({ username, password, full_name }: Request): Promise<User> {
-
     const userRepository = getCustomRepository(UserRepository);
-    const findUserByUsername = await userRepository.findByUsername(username);
 
-    if (findUserByUsername) {
-      throw new AppError('username ja cadastrado para outro usuário');
+    try {
+      const findUserByUsername = await userRepository.findByUsername(username);
+
+      if (findUserByUsername) {
+        throw new AppError('username ja cadastrado para outro usuário', 400);
+      }
+    } catch (error) {
+      console.log(error)
     }
+
     try {
 
       const user = userRepository.create({
