@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, TableForeignKey, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, TableForeignKey, ManyToOne, BeforeInsert, BeforeUpdate } from 'typeorm';
 import User from './user.model';
 
 @Entity('tb_address')
@@ -7,11 +7,11 @@ class Address {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
-  @ManyToOne(type => User)
+  @ManyToOne(type => User, (user) => user.address)
   user: User;
 
   @Column()
-  user_id: number;
+  userId?: number;
 
   @Column()
   street: string;
@@ -30,6 +30,16 @@ class Address {
 
   @Column()
   postal_code: string;
+
+  @BeforeInsert()
+  beforeInsert() {
+    this.userId = this.user.id;
+  }
+
+  @BeforeUpdate()
+  beforeUpdate() {
+    this.userId = this.user.id;
+  }
 }
 
 export default Address;

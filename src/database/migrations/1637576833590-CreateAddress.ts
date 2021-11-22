@@ -9,12 +9,13 @@ export class CreateAddress1637576833590 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int(11)',
+            type: 'int',
             isPrimary: true,
+            isGenerated: true,
             generationStrategy: 'increment',
           },
           {
-            name: 'user_id',
+            name: 'userId',
             type: 'int(11)',
           },
           {
@@ -30,6 +31,16 @@ export class CreateAddress1637576833590 implements MigrationInterface {
           {
             name: 'additional_addres',
             type: 'varchar(100)',
+            isNullable: false,
+          },
+          {
+            name: 'city',
+            type: 'varchar(120)',
+            isNullable: false,
+          },
+          {
+            name: 'country',
+            type: 'varchar(2)',
             isNullable: false,
           },
           {
@@ -55,7 +66,7 @@ export class CreateAddress1637576833590 implements MigrationInterface {
     await queryRunner.createForeignKey('tb_address',
       new TableForeignKey({
         name: 'FK_ADDRESS_USER_ID',
-        columnNames: ['user_id'],
+        columnNames: ['userId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'tb_users',
         onDelete: 'CASCADE',

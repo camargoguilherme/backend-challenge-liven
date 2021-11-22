@@ -10,7 +10,7 @@ const typeormConfig: ConnectionOptions = {
   database: process.env.DB_DATABASE,
   logging: ['error'],
   synchronize: false,
-  entities: [join(__dirname, '../models/**{.ts,.js}')],
+  entities: [join(__dirname, '../app/models/**{.ts,.js}')],
   migrations: ['src/database/migrations/*{.ts,.js}'],
   cli: {
     migrationsDir: 'src/database/migrations',
