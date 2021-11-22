@@ -34,12 +34,9 @@ class UserService {
     }
     try {
 
-      let salt = `$2a$10$${SALT}`;
-      let passwordHash = bcrypt.hashSync(password, salt);
-
       const user = userRepository.create({
         username,
-        password: passwordHash,
+        password,
         full_name,
       })
 

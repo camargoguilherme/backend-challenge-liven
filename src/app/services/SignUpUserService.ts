@@ -25,25 +25,20 @@ interface Request {
 
 
 class SignUpUserService {
-  public async execute({ username, password, full_name, address }: Request): Promise<User> {
-    const userRepository = getCustomRepository(UserRepository);
+  public async create({ username, password, full_name }: Request): Promise<User> {
 
+    const userRepository = getCustomRepository(UserRepository);
     const findUserByUsername = await userRepository.findByUsername(username);
 
     if (findUserByUsername) {
       throw new AppError('username ja cadastrado para outro usuário');
     }
-
     try {
-
-      //let salt = `$2a$10$${SALT}`;
-      let passwordHash = bcrypt.hashSync(password, SALT);
 
       const user = userRepository.create({
         username,
-        password: passwordHash,
+        password,
         full_name,
-
       })
 
       await userRepository.save(user);
@@ -55,4 +50,4 @@ class SignUpUserService {
   }
 }
 
-export default new SignUpUserService();
+export default SignUpUserService;

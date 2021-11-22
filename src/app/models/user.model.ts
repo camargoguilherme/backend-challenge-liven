@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BeforeInsert } from 'typeorm';
+import bcrypt from 'bcryptjs';
+
 import Address from './address.model';
 
 @Entity('tb_users')
@@ -17,6 +19,20 @@ class User {
 
   @Column()
   full_name: string;
+
+  @BeforeInsert()
+  beforeInsert() {
+    this.password = this.hashPassword(this.password);
+  }
+
+  hashPassword(password: string) {
+    let salt = `$2a$10$${process.env.SALT}`;
+    return bcrypt.hashSync(password, salt);
+  }
+
+  checkPassword(password: string) {
+    return bcrypt.compareSync(password, this.password);
+  }
 }
 
 export default User;
