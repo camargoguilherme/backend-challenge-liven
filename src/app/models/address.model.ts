@@ -23,6 +23,12 @@ class Address {
   additional_addres: string;
 
   @Column()
+  city: string;
+
+  @Column()
+  country: string;
+
+  @Column()
   postal_code: string;
 }
 
