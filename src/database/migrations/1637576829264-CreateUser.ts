@@ -9,8 +9,9 @@ export class CreateUser1637576829264 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'int(11)',
+            type: 'int',
             isPrimary: true,
+            isGenerated: true,
             generationStrategy: 'increment',
           },
           {
