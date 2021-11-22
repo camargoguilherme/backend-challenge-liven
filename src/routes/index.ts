@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { authenticate } from '../app/middlewares/auth';
 
 import pkgJson from '../../package.json'
 import authRoutes from './auth.routes';
@@ -16,6 +17,7 @@ routes.get('/', (req, res) => {
 
 routes.use(authRoutes);
 routes.use(signUpRoutes);
+routes.use(authenticate);
 routes.use(usersRoutes);
 
 export default routes;
