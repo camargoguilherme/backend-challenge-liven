@@ -1,8 +1,6 @@
 import { join } from 'path';
 import { ConnectionOptions } from 'typeorm';
 
-console.log(join(__dirname, '../entities/**{.ts,.js}'))
-
 const typeormConfig: ConnectionOptions = {
   type: 'mysql',
   host: process.env.DB_HOST,
