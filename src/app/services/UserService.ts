@@ -4,34 +4,23 @@ import bcrypt from 'bcryptjs';
 import User from '../models/user.model';
 import UserRepository from '../repositories/UserRepository';
 import AppError from '../../errors/AppError';
-import { SALT } from '../../constants';
-
-type IAddress = {
-  street: string;
-  number: string;
-  additional_addres: string;
-  city: string;
-  country: string;
-  postal_code: string;
-}
-
-interface Request {
-  id?: string;
-  username: string;
-  password: string;
-  full_name: string;
-  address?: IAddress;
-}
+import AddressRepository from '../repositories/AddressRepository';
 
 class UserService {
-  public async create({ username, password, full_name }: Request): Promise<User> {
+  public async create({ username, password, full_name }: User): Promise<User> {
 
     const userRepository = getCustomRepository(UserRepository);
-    const findUserByUsername = await userRepository.findByUsername(username);
 
-    if (findUserByUsername) {
-      throw new AppError('username ja cadastrado para outro usuário');
+    try {
+      const findUserByUsername = await userRepository.findByUsername(username);
+
+      if (findUserByUsername) {
+        throw new AppError('username ja cadastrado para outro usuário', 400);
+      }
+    } catch (error) {
+      throw error;
     }
+
     try {
 
       const user = userRepository.create({
@@ -48,7 +37,7 @@ class UserService {
     }
   }
 
-  public async update(updateUser: Request): Promise<User> {
+  public async update(updateUser: User): Promise<User> {
 
     const userRepository = getCustomRepository(UserRepository);
     const findedAndUpdatedUser = await userRepository.findById(updateUser['id']);
@@ -60,6 +49,8 @@ class UserService {
     Object.keys(updateUser).forEach(key => {
       findedAndUpdatedUser[key] = updateUser[key];
     })
+
+    delete findedAndUpdatedUser.address;
 
     try {
       await userRepository.update(findedAndUpdatedUser.id, findedAndUpdatedUser);
@@ -73,13 +64,15 @@ class UserService {
   public async delete(id: string): Promise<User> {
 
     const userRepository = getCustomRepository(UserRepository);
-    const findUserById = await userRepository.findById(id);
+    const addressRepository = getCustomRepository(AddressRepository);
+    const findUserById = await userRepository.findById(parseInt(id));
 
     if (!findUserById) {
       throw new AppError(`Usuário com id '${id}' não encontrado`, 404);
     }
     try {
-      await userRepository.delete(findUserById);
+      //delete findUserById.address;
+      await userRepository.delete(id);
       return findUserById;
     } catch (error) {
       throw new AppError(error.message, 500);
@@ -89,7 +82,7 @@ class UserService {
   public async find(id: string): Promise<User> {
 
     const userRepository = getCustomRepository(UserRepository);
-    const findUserById = await userRepository.findById(id);
+    const findUserById = await userRepository.findById(parseInt(id));
 
     if (!findUserById) {
       throw new AppError(`Usuário com id '${id}' não encontrado`, 404);

@@ -2,16 +2,18 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BeforeInsert, Before
 import bcrypt from 'bcryptjs';
 
 import Address from './address.model';
+import { BaseModel } from './base.model';
 
 @Entity('tb_users')
-class User {
-  @PrimaryGeneratedColumn("increment")
-  id: number;
+class User extends BaseModel {
 
-  @OneToMany(type => Address, address => address.user)
+  @OneToMany(type => Address, address => address.user, {
+    eager: true,
+    cascade: true
+  })
   address: Address[];
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()

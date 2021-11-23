@@ -5,6 +5,7 @@ import pkgJson from '../../package.json'
 import authRoutes from './auth.routes';
 import signUpRoutes from './signup.routes';
 import usersRoutes from './users.routes';
+import addressRoutes from './address.routes';
 
 const routes = Router();
 
@@ -19,5 +20,6 @@ routes.use(authRoutes);
 routes.use(signUpRoutes);
 routes.use(authenticate);
 routes.use(usersRoutes);
+routes.use(addressRoutes);
 
 export default routes;

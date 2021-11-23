@@ -1,17 +1,19 @@
-import UserService from '../services/UserService';
 import { Request, Response } from 'express';
 
 import AppError from 'src/errors/AppError';
+import AddressService from '../services/AddressService';
+import UserService from '../services/UserService';
 
 
 class AddressController {
   public async create(req: Request, res: Response) {
-    const createUser = req.body;
-    const userService = new UserService();
+    const createAddress = req.body;
+    const user = { id: req['userId'] };
+    const addressService = new AddressService();
     try {
-      const user = await userService.create(createUser);
+      const address = await addressService.create({ ...createAddress, user });
 
-      return res.json(user);
+      return res.json(address);
     } catch (error) {
       const err = error as AppError
       return res.status(err.statusCode).json({ message: error.message });
@@ -20,11 +22,12 @@ class AddressController {
 
   public async update(req: Request, res: Response) {
     const userId = req['userId'];
-    const updateUser = { ...req.body, id: userId };
-    const userService = new UserService();
+    const { id: addressId } = req.params;
+    const updateAddress = { ...req.body, id: addressId };
+    const addressService = new AddressService();
     try {
-      const user = await userService.update(updateUser);
-      return res.json(user);
+      const address = await addressService.update(updateAddress);
+      return res.json(address);
     } catch (error) {
       const err = error as AppError
       return res.status(err.statusCode).json({ message: error.message });
@@ -32,11 +35,11 @@ class AddressController {
   }
 
   public async delete(req: Request, res: Response) {
-    const userId = req['userId'];
-    const userService = new UserService();
+    const { id: addressId } = req.params;
+    const addressService = new AddressService();
     try {
-      const user = await userService.delete(userId);
-      return res.json(user);
+      const address = await addressService.delete(addressId);
+      return res.json(address);
     } catch (error) {
       const err = error as AppError
       return res.status(err.statusCode).json({ message: error.message });
@@ -44,11 +47,11 @@ class AddressController {
   }
 
   public async find(req: Request, res: Response) {
-    const userId = req['userId'];
-    const userService = new UserService();
+    const { id: addressId } = req.params;
+    const addressService = new AddressService();
     try {
-      const user = await userService.find(userId);
-      return res.json(user);
+      const address = await addressService.find(addressId);
+      return res.json(address);
     } catch (error) {
       const err = error as AppError
       return res.status(err.statusCode).json({ message: error.message });
@@ -56,10 +59,10 @@ class AddressController {
   }
 
   public async findAll(req: Request, res: Response) {
-    const userService = new UserService();
+    const addressService = new AddressService();
     try {
-      const user = await userService.findAll();
-      return res.json(user);
+      const address = await addressService.findAll();
+      return res.json(address);
     } catch (error) {
       const err = error as AppError
       return res.status(err.statusCode).json({ message: error.message });

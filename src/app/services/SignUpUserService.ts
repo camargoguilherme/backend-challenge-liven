@@ -35,7 +35,7 @@ class SignUpUserService {
         throw new AppError('username ja cadastrado para outro usuário', 400);
       }
     } catch (error) {
-      console.log(error)
+      throw error;
     }
 
     try {

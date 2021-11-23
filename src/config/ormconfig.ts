@@ -13,6 +13,7 @@ const typeormConfig: ConnectionOptions = {
   entities: [join(__dirname, '../app/models/**{.ts,.js}')],
   migrations: ['src/database/migrations/*{.ts,.js}'],
   cli: {
+    entitiesDir: join(__dirname, '../app/models/**{.ts,.js}'),
     migrationsDir: 'src/database/migrations',
   },
 };
