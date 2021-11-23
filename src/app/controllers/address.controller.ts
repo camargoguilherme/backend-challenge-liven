@@ -59,10 +59,17 @@ class AddressController {
   }
 
   public async findAll(req: Request, res: Response) {
+    const query = req.query;
     const addressService = new AddressService();
     try {
-      const address = await addressService.findAll();
-      return res.json(address);
+      if (Object.keys(query).length > 0) {
+        const address = await addressService.findWithQueryParams(query);
+        return res.json(address);
+      } else {
+
+        const address = await addressService.findAll();
+        return res.json(address);
+      }
     } catch (error) {
       const err = error as AppError
       return res.status(err.statusCode).json({ message: error.message });

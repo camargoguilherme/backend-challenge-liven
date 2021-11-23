@@ -1,10 +1,10 @@
 import { getCustomRepository } from 'typeorm';
-import bcrypt from 'bcryptjs';
 
 import Address from '../models/address.model';
 import AddressRepository from '../repositories/AddressRepository';
 import AppError from '../../errors/AppError';
 import UserRepository from '../repositories/UserRepository';
+
 class AddressService {
   public async create(createAddress: Address): Promise<Address> {
 
@@ -68,6 +68,20 @@ class AddressService {
 
     if (!findAddressById) {
       throw new AppError(`Endereço com id '${id}' não encontrado`);
+    }
+    return findAddressById;
+  }
+
+  public async findWithQueryParams(query: Object): Promise<Address[]> {
+
+    const addressRepository = getCustomRepository(AddressRepository);
+    const findAddressById = await addressRepository.findWithQuerParams(query);
+
+    if (!findAddressById) {
+      const message = Object.keys(query).map(key => {
+        return ` ${key} '${query[key]}'`;
+      }).join(', ')
+      throw new AppError(`Endereço com${message}não encontrado`);
     }
     return findAddressById;
   }
